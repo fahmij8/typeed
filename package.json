@@ -9,14 +9,26 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/font": "^13.0.6",
     "@types/node": "18.11.10",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.9",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.6",
+    "is-hotkey": "^0.2.0",
     "next": "13.0.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "slate": "^0.86.0",
+    "slate-history": "^0.86.0",
+    "slate-react": "^0.86.0",
     "typescript": "4.9.3"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.19",
+    "tailwindcss": "^3.2.4"
   }
 }
