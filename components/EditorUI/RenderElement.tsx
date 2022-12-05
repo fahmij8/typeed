@@ -7,7 +7,7 @@ interface ElementProps extends Omit<SlateElement, "type"> {
     | "paragraph"
     | "block-quote"
     | "bulleted-list"
-    | "heading-one"
+    | "title"
     | "heading-two"
     | "list-item"
     | "numbered-list";
@@ -42,9 +42,9 @@ const Element = ({
           {children}
         </ul>
       );
-    case "heading-one":
+    case "title":
       return (
-        <h1 style={style} {...attributes}>
+        <h1 style={style} {...attributes} className="text-2xl font-bold">
           {children}
         </h1>
       );
