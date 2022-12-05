@@ -12,6 +12,8 @@ export interface StructInitialContext {
     visible: boolean;
     content: JSX.Element | ReactNode | null;
   };
+  forceShowToolbar: boolean;
+  savingStatus: string;
 }
 
 export enum TypeedActionMap {

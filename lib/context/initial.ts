@@ -6,4 +6,6 @@ export const initialContext: StructInitialContext = {
     visible: false,
     content: null,
   },
+  forceShowToolbar: false,
+  savingStatus: "",
 };
