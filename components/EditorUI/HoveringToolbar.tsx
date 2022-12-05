@@ -52,7 +52,7 @@ const HoveringToolbar = () => {
         : calculateLeftPosition;
     el.style.opacity = "1";
     el.style.top = `${
-      (rect?.top || 0) + window.pageYOffset - el.offsetHeight
+      (rect?.top || 0) + window.pageYOffset + el.offsetHeight
     }px`;
     el.style.left = `${finalLeftPosition}px`;
   }, [editor, selection]);
