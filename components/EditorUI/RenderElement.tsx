@@ -20,25 +20,31 @@ const Element = ({
   switch (element.type) {
     case "block-quote":
       return (
-        <blockquote style={style} {...attributes}>
-          {children}
+        <blockquote
+          style={style}
+          {...attributes}
+          className="p-4 my-4 bg-gray-50 border-l-4 border-gray-300 dark:bg-gray-800"
+        >
+          <p className="text-xl italic font-medium leading-relaxed text-gray-900 dark:text-white">
+            {children}
+          </p>
         </blockquote>
       );
     case "bulleted-list":
       return (
-        <ul style={style} {...attributes}>
+        <ul style={style} {...attributes} className="list-disc p-5">
           {children}
         </ul>
       );
     case "title":
       return (
-        <h1 style={style} {...attributes} className="text-2xl font-bold">
+        <h1 style={style} {...attributes} className="text-2xl font-extrabold">
           {children}
         </h1>
       );
     case "heading-two":
       return (
-        <h2 style={style} {...attributes}>
+        <h2 style={style} {...attributes} className="text-xl font-semibold">
           {children}
         </h2>
       );
@@ -50,7 +56,7 @@ const Element = ({
       );
     case "numbered-list":
       return (
-        <ol style={style} {...attributes}>
+        <ol style={style} {...attributes} className="list-decimal p-5">
           {children}
         </ol>
       );

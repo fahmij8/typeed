@@ -39,10 +39,6 @@ const withLayout = (editor: EditorType) => {
             type = "title";
             enforceType(type);
             break;
-          case 1:
-            type = "paragraph";
-            enforceType(type);
-            break;
           default:
             break;
         }

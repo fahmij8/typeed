@@ -4,12 +4,18 @@ import type { CustomElement, EditorType } from "@/lib/types";
 export const LIST_TYPES = ["numbered-list", "bulleted-list"];
 export const TEXT_ALIGN_TYPES = ["left", "center", "right", "justify"];
 
-const isMarkActive = (editor: EditorType, format: string): boolean => {
+const isMarkActive = (
+  editor: EditorType,
+  format: CustomElement["type"]
+): boolean => {
   const marks = Editor.marks(editor);
   return marks ? marks[format as keyof typeof marks] === true : false;
 };
 
-export const toggleMark = (editor: EditorType, format: string) => {
+export const toggleMark = (
+  editor: EditorType,
+  format: CustomElement["type"]
+) => {
   const isActive = isMarkActive(editor, format);
 
   if (isActive) {
@@ -21,7 +27,7 @@ export const toggleMark = (editor: EditorType, format: string) => {
 
 const isBlockActive = (
   editor: EditorType,
-  format: string,
+  format: CustomElement["type"],
   blockType = "type"
 ) => {
   const { selection } = editor;

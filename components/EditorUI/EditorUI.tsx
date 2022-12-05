@@ -68,7 +68,7 @@ const EditorUI = () => {
               const hotkey = HOTKEYS[pressedKey as keyof typeof HOTKEYS];
               if (hotkey.type === "mark" && typeof hotkey.mark === "string") {
                 event.preventDefault();
-                toggleMark(editor, hotkey.mark);
+                toggleMark(editor, hotkey.mark as CustomElement["type"]);
               } else if (
                 hotkey.type === "special" &&
                 typeof hotkey.mark === "function"

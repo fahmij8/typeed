@@ -15,10 +15,12 @@ export interface CustomElement {
     | "numbered-list"
     | "title"
     | "heading-two"
-    | "align-left"
-    | "align-center"
-    | "align-right"
-    | "align-justify";
+    | "left"
+    | "center"
+    | "right"
+    | "bold"
+    | "italic"
+    | "underline";
   children: CustomText[];
   align?: HTMLAttributes<HTMLElement>[keyof HTMLAttributes<HTMLElement>];
 }

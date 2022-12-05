@@ -11,12 +11,15 @@ import {
   MdMoreHoriz,
 } from "react-icons/md";
 import { useTypeedContext } from "@/lib/context";
+import BottomSheetToolbar from "./BottomSheetToolbar";
+import { toggleMark } from "./utilities";
 
 const HoveringToolbar = () => {
   const { dispatch } = useTypeedContext();
   const ref = useRef<HTMLDivElement>(null);
   const editor = useSlate();
   const { selection } = editor;
+
   useEffect(() => {
     const el = ref.current;
 
@@ -24,13 +27,18 @@ const HoveringToolbar = () => {
       return;
     }
 
+    const removeToolbar = () => {
+      el.style.opacity = "0";
+      setTimeout(() => el.removeAttribute("style"), 500);
+    };
+
     if (
       !selection ||
       !ReactEditor.isFocused(editor) ||
       Range.isCollapsed(selection) ||
       Editor.string(editor, selection) === ""
     ) {
-      el.removeAttribute("style");
+      removeToolbar();
       return;
     }
 
@@ -66,25 +74,37 @@ const HoveringToolbar = () => {
   return (
     <>
       <div
-        className="flex m-2 absolute z-10 top-[-10000px] left-[-10000px] -mt-2 opacity-0 transition-opacity"
+        className="flex m-2 absolute z-10 top-[-10000px] left-[-10000px] -mt-2 opacity-0 transition-opacity duration-300"
         ref={ref}
       >
-        <button className={`${baseClass} ${leftMostClass}`}>
+        <button
+          className={`${baseClass} ${leftMostClass}`}
+          onClick={() => toggleMark(editor, "bold")}
+        >
           <div className="flex leading-5">
             <MdFormatBold />
           </div>
         </button>
-        <button className={`${baseClass} ${middleClass}`}>
+        <button
+          className={`${baseClass} ${middleClass}`}
+          onClick={() => toggleMark(editor, "italic")}
+        >
           <div className="flex leading-5">
             <MdFormatItalic />
           </div>
         </button>
-        <button className={`${baseClass} ${middleClass}`}>
+        <button
+          className={`${baseClass} ${middleClass}`}
+          onClick={() => toggleMark(editor, "underline")}
+        >
           <div className="flex leading-5">
             <MdFormatUnderlined />
           </div>
         </button>
-        <button className={`${baseClass} ${middleClass}`}>
+        <button
+          className={`${baseClass} ${middleClass}`}
+          onClick={() => toggleMark(editor, "code")}
+        >
           <div className="flex leading-5">
             <MdCode />
           </div>
@@ -94,11 +114,7 @@ const HoveringToolbar = () => {
           onClick={() =>
             dispatch({
               type: "OPEN_BOTTOM_SHEET",
-              payload: (
-                <div onClick={() => dispatch({ type: "CLOSE_BOTTOM_SHEET" })}>
-                  Test
-                </div>
-              ),
+              payload: <BottomSheetToolbar editor={editor} />,
             })
           }
         >
