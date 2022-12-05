@@ -9,6 +9,7 @@ import {
   MdFormatListNumbered,
   MdFormatListBulleted,
   MdLooksTwo,
+  MdFormatClear,
 } from "react-icons/md";
 import { toggleBlock } from "./utilities";
 
@@ -50,6 +51,11 @@ export default function BottomSheetToolbar({ editor }: { editor: EditorType }) {
       icon: MdLooksTwo,
       text: "Heading 2",
       clickEvent: () => toggleBlock(editor, "heading-two"),
+    },
+    {
+      icon: MdFormatClear,
+      text: "Clear Formatting",
+      clickEvent: () => toggleBlock(editor, "paragraph"),
     },
   ];
 

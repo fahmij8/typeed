@@ -15,7 +15,7 @@ import BottomSheetToolbar from "./BottomSheetToolbar";
 import { toggleMark } from "./utilities";
 
 const HoveringToolbar = () => {
-  const { dispatch } = useTypeedContext();
+  const { dispatch, forceShowToolbar } = useTypeedContext();
   const ref = useRef<HTMLDivElement>(null);
   const editor = useSlate();
   const { selection } = editor;
@@ -32,14 +32,22 @@ const HoveringToolbar = () => {
       setTimeout(() => el.removeAttribute("style"), 500);
     };
 
-    if (
-      !selection ||
-      !ReactEditor.isFocused(editor) ||
-      Range.isCollapsed(selection) ||
-      Editor.string(editor, selection) === ""
-    ) {
-      removeToolbar();
-      return;
+    if (!forceShowToolbar) {
+      if (
+        !selection ||
+        !ReactEditor.isFocused(editor) ||
+        Range.isCollapsed(selection) ||
+        Editor.string(editor, selection) === ""
+      ) {
+        removeToolbar();
+        return;
+      }
+    }
+    if (forceShowToolbar) {
+      if (!ReactEditor.isFocused(editor)) {
+        removeToolbar();
+        return;
+      }
     }
 
     const domSelection = window.getSelection();
@@ -63,7 +71,7 @@ const HoveringToolbar = () => {
       (rect?.top || 0) + window.pageYOffset + el.offsetHeight
     }px`;
     el.style.left = `${finalLeftPosition}px`;
-  }, [editor, selection]);
+  }, [editor, forceShowToolbar, selection]);
 
   const baseClass =
     "text-base focus:outline-none flex justify-center px-3 py-2 font-bold cursor-pointer hover:bg-slate-600 bg-slate-800 text-gray-100 border duration-200 ease-in-out border-slate-700 transition";

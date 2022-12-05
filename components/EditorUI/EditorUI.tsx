@@ -13,11 +13,13 @@ import { toggleMark, initialValue } from "./utilities";
 import { HOTKEYS } from "./keyboardEvents";
 import type { CustomElement } from "@/lib/types";
 import { useEffect, useState } from "react";
+import { useTypeedContext } from "@/lib/context";
 
 const EditorUI = () => {
   const [initialNotes, setInitialNotes] = useState<CustomElement[] | null>(
     null
   );
+  const { dispatch, savingStatus } = useTypeedContext();
   useEffect(() => {
     const content = localStorage.getItem("content");
     if (content) {
@@ -44,7 +46,7 @@ const EditorUI = () => {
   );
 
   return (
-    <>
+    <section className="p-4 mt-4 border-2 rounded-lg bg-white shadow-2 dark:bg-gray-500">
       {!initialNotes && (
         <div className="flex items-center justify-center p-5">
           <div className="flex space-x-2 animate-pulse">
@@ -65,6 +67,20 @@ const EditorUI = () => {
             if (isAstChange) {
               const content = JSON.stringify(value);
               localStorage.setItem("content", content);
+              dispatch({
+                type: "SET_VALUE",
+                payload: {
+                  savingStatus: "Your changes is saved",
+                },
+              });
+              setTimeout(() => {
+                dispatch({
+                  type: "SET_VALUE",
+                  payload: {
+                    savingStatus: "",
+                  },
+                });
+              }, 3500);
             }
           }}
         >
@@ -94,9 +110,14 @@ const EditorUI = () => {
               }
             }}
           />
+          {savingStatus && (
+            <p className="text-xs text-slate-700/50 dark:text-white text-right mt-3 animate-fade-in-up">
+              {savingStatus}
+            </p>
+          )}
         </Slate>
       )}
-    </>
+    </section>
   );
 };
 
