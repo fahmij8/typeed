@@ -2,19 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@media (prefers-color-scheme: dark) {
-  span,
-  p,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply text-gray-200;
-  }
-}
-
 code > * {
   @apply text-red-700 bg-red-100 p-1 !important;
 }
