@@ -1,6 +1,9 @@
-import type { StructInitialContext } from '@/lib/types';
+import type { StructInitialContext } from "@/lib/types";
 
 export const initialContext: StructInitialContext = {
   darkMode: false,
-  savedNotes: [],
+  bottomSheet: {
+    visible: false,
+    content: null,
+  },
 };

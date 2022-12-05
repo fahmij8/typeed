@@ -1,9 +1,9 @@
-import { createElement, createContext, useContext, useReducer } from 'react';
-import reducer from './reducer';
-import { initialContext } from './initial';
+import { createElement, createContext, useContext, useReducer } from "react";
+import reducer from "./reducer";
+import { initialContext } from "./initial";
 
-import type { ReactNode } from 'react';
-import type { FnDispatch, StructInitialContext } from '@/lib/types';
+import type { ReactNode } from "react";
+import type { FnDispatch, StructInitialContext } from "@/lib/types";
 
 export interface StructTypeedContext extends StructInitialContext {
   dispatch: FnDispatch;
@@ -28,8 +28,8 @@ const TypeedProvider = ({ children }: TypeedProviderProps) => {
     dispatch,
   };
 
-  if (process.env.NODE_ENV === 'development')
-    console.log('Typeed context:', value);
+  if (process.env.NODE_ENV === "development")
+    console.log("Typeed context:", value);
 
   return createElement(TypeedContext.Provider, { value }, children);
 };
