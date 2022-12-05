@@ -28,8 +28,7 @@ const HoveringToolbar = () => {
     }
 
     const removeToolbar = () => {
-      el.style.opacity = "0";
-      setTimeout(() => el.removeAttribute("style"), 500);
+      el.removeAttribute("style");
     };
 
     if (!forceShowToolbar) {
@@ -82,7 +81,7 @@ const HoveringToolbar = () => {
   return (
     <>
       <div
-        className="flex m-2 absolute z-10 top-[-10000px] left-[-10000px] -mt-2 opacity-0 transition-opacity duration-300"
+        className="flex m-2 absolute z-10 top-[-10000px] left-[-10000px] -mt-2 opacity-0 transition-opacity duration-500"
         ref={ref}
       >
         <button
