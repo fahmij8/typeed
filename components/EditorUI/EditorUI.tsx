@@ -23,7 +23,15 @@ const EditorUI = () => {
   useEffect(() => {
     const content = localStorage.getItem("content");
     if (content) {
-      setInitialNotes(JSON.parse(content));
+      const contentToCheck = JSON.parse(content);
+      if (
+        contentToCheck[0].children[0].text !== "" &&
+        contentToCheck[1].children[0].text !== ""
+      ) {
+        setInitialNotes(contentToCheck);
+      } else {
+        setInitialNotes(initialValue);
+      }
     } else {
       setInitialNotes(initialValue);
     }
