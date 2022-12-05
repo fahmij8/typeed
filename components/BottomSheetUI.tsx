@@ -9,6 +9,7 @@ export default function BottomSheetUI() {
   const ref = useRef<SheetRef>(null);
   const { bottomSheet, dispatch } = useTypeedContext();
   const onClose = () => dispatch({ type: "CLOSE_BOTTOM_SHEET" });
+  const snapPoints = window.screen.width > 768 ? [400, 200] : [1, 0.9];
 
   return (
     <>
@@ -16,7 +17,7 @@ export default function BottomSheetUI() {
         ref={ref}
         isOpen={bottomSheet.visible}
         onClose={onClose}
-        snapPoints={[600, 400]}
+        snapPoints={snapPoints}
         initialSnap={1}
       >
         <Sheet.Container>

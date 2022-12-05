@@ -1,85 +1,26 @@
 "use client";
 
-import React, { useMemo, useCallback } from "react";
-import { createEditor, Editor } from "slate";
-import { Slate, Editable, withReact } from "slate-react";
-import { withHistory } from "slate-history";
-import withLayout from "./withLayout";
+import HoveringToolbar from "./HoveringToolbar";
 import isHotkey from "is-hotkey";
+import withLayout from "./withLayout";
 import RenderLeaf from "./RenderLeaf";
 import RenderElement from "./RenderElement";
-import HoveringToolbar from "./HoveringToolbar";
-import { onBackspace, HOTKEYS } from "./keyboardEvents";
-import type { CustomElement, EditorType } from "@/lib/types";
-
-const initialValue: CustomElement[] = [
-  {
-    type: "title",
-    children: [
-      {
-        text: "Welcome to Typeed! 👋 ",
-        bold: true,
-      },
-    ],
-  },
-  {
-    type: "paragraph",
-    children: [
-      {
-        text: "Typeed is your go to web app to save your quick notes without pulling up your native notepad app 🤣.",
-      },
-    ],
-  },
-
-  {
-    type: "paragraph",
-    children: [
-      {
-        text: "It comes with ",
-      },
-      {
-        text: "a fancy formatting menu ",
-        bold: true,
-      },
-      {
-        text: "by selecting the text you want to format. You can also use the ",
-      },
-      {
-        text: "keyboard shortcuts",
-        italic: true,
-        underline: true,
-      },
-      {
-        text: " to format your text. Lastly, no need to worry about saving your notes, Typeed will automatically save your notes as you type. ",
-      },
-      {
-        text: "Enjoy! and start with deleting all of this text 😂",
-      },
-    ],
-  },
-];
+import { useMemo, useCallback } from "react";
+import { createEditor } from "slate";
+import { Slate, Editable, withReact } from "slate-react";
+import { withHistory } from "slate-history";
+import { toggleMark, initialValue } from "./utilities";
+import { HOTKEYS } from "./keyboardEvents";
+import { useState } from "react";
+import type { CustomElement } from "@/lib/types";
+import { useEffect } from "react";
 
 const EditorUI = () => {
+  const [notes, setNotes] = useState(initialValue);
   const editor = useMemo(
     () => withLayout(withHistory(withReact(createEditor()))),
     []
   );
-
-  /** Helper Function */
-  const isMarkActive = (editor: EditorType, format: string): boolean => {
-    const marks = Editor.marks(editor);
-    return marks ? marks[format as keyof typeof marks] === true : false;
-  };
-
-  const toggleMark = (editor: EditorType, format: string) => {
-    const isActive = isMarkActive(editor, format);
-
-    if (isActive) {
-      Editor.removeMark(editor, format);
-    } else {
-      Editor.addMark(editor, format, true);
-    }
-  };
 
   const EditorLeaf = useCallback(
     (props: Parameters<typeof RenderLeaf>[0]) => <RenderLeaf {...props} />,
@@ -93,19 +34,26 @@ const EditorUI = () => {
     []
   );
 
+  useEffect(() => {
+    const storeNotesDebounced = setTimeout(() => {
+      const isAstChange = editor.operations.some(
+        (op) => "set_selection" !== op.type
+      );
+      if (isAstChange) {
+        const content = JSON.stringify(notes);
+        localStorage.setItem("content", content);
+      }
+    }, 1000);
+
+    return () => clearTimeout(storeNotesDebounced);
+  }, [editor.operations, notes]);
+
   return (
     <Slate
       editor={editor}
-      value={initialValue}
+      value={notes}
       onChange={(value) => {
-        const isAstChange = editor.operations.some(
-          (op) => "set_selection" !== op.type
-        );
-        if (isAstChange) {
-          // Save the value to Local Storage.
-          const content = JSON.stringify(value);
-          localStorage.setItem("content", content);
-        }
+        setNotes(value as CustomElement[]);
       }}
     >
       <HoveringToolbar />
@@ -115,15 +63,18 @@ const EditorUI = () => {
         renderLeaf={EditorLeaf}
         renderElement={EditorElement}
         onKeyDown={(event) => {
-          // Special Case
-          if (isHotkey("mod?+backspace", event)) {
-            onBackspace(editor, event);
-          }
-          for (const hotkey in HOTKEYS) {
-            if (isHotkey(hotkey, event)) {
-              event.preventDefault();
-              const mark = HOTKEYS[hotkey as keyof typeof HOTKEYS];
-              toggleMark(editor, mark);
+          for (const pressedKey in HOTKEYS) {
+            if (isHotkey(pressedKey, event)) {
+              const hotkey = HOTKEYS[pressedKey as keyof typeof HOTKEYS];
+              if (hotkey.type === "mark" && typeof hotkey.mark === "string") {
+                event.preventDefault();
+                toggleMark(editor, hotkey.mark);
+              } else if (
+                hotkey.type === "special" &&
+                typeof hotkey.mark === "function"
+              ) {
+                hotkey.mark(editor, event);
+              }
             }
           }
         }}

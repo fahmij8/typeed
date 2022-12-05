@@ -1,17 +1,5 @@
+import type { CustomElement } from "@/lib/types";
 import type { ReactNode } from "react";
-import type { Element as SlateElement } from "slate";
-
-interface ElementProps extends Omit<SlateElement, "type"> {
-  align?: "left" | "center" | "right";
-  type:
-    | "paragraph"
-    | "block-quote"
-    | "bulleted-list"
-    | "title"
-    | "heading-two"
-    | "list-item"
-    | "numbered-list";
-}
 
 const Element = ({
   attributes,
@@ -26,7 +14,7 @@ const Element = ({
     ref: any;
   };
   children: ReactNode;
-  element: ElementProps;
+  element: CustomElement;
 }) => {
   const style = { textAlign: element.align };
   switch (element.type) {

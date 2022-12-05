@@ -2,7 +2,7 @@ import { Editor, Transforms, Range } from "slate";
 import type { KeyboardEvent } from "react";
 import type { EditorType } from "@/lib/types";
 
-export const onBackspace = (
+const onBackspace = (
   editor: EditorType,
   event: KeyboardEvent<HTMLDivElement>
 ) => {
@@ -40,9 +40,35 @@ export const onBackspace = (
   }
 };
 
+const onEnter = (editor: EditorType, event: KeyboardEvent<HTMLDivElement>) => {
+  event.preventDefault();
+  editor.insertText("\n");
+  Transforms.move(editor, { distance: 0, unit: "offset" });
+};
+
 export const HOTKEYS = {
-  "mod+b": "bold",
-  "mod+i": "italic",
-  "mod+u": "underline",
-  "mod+1": "code",
+  "mod+b": {
+    type: "mark",
+    mark: "bold",
+  },
+  "mod+i": {
+    type: "mark",
+    mark: "italic",
+  },
+  "mod+u": {
+    type: "mark",
+    mark: "underline",
+  },
+  "mod+shift?+`": {
+    type: "mark",
+    mark: "code",
+  },
+  "mod?+backspace": {
+    type: "special",
+    mark: onBackspace,
+  },
+  "shift+enter": {
+    type: "special",
+    mark: onEnter,
+  },
 };
